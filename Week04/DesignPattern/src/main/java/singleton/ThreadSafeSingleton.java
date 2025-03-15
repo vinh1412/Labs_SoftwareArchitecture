@@ -13,8 +13,11 @@ package singleton;
  * @version:    1.0
  */
 public class ThreadSafeSingleton {
+
     private static volatile ThreadSafeSingleton instance;
+
     public String value;
+
     private ThreadSafeSingleton(String value){
         try {
             Thread.sleep(1000);
@@ -23,6 +26,7 @@ public class ThreadSafeSingleton {
         }
         this.value = value;
     }
+
     public static synchronized ThreadSafeSingleton getInstance(String value){
         if(instance == null){
             instance = new ThreadSafeSingleton(value);
