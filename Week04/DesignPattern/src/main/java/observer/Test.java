@@ -29,7 +29,12 @@ public class Test {
         obj2.setSubject(topic);
         obj3.setSubject(topic);
 
+        topic.unregister(obj2);
+
+
         obj1.update();
+        obj2.update();
+        obj3.update();
         topic.postMessage("New Message");
     }
 }

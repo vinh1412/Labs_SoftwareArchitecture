@@ -15,11 +15,11 @@ import java.util.List;
  * @date:   13/03/2025
  * @version:    1.0
  */
-public class MyTopic implements Subject{
+public class MyTopic implements Subject {
     private List<Observer> observers;
     private String message;
     private boolean changed;
-    private final Object MUTEX= new Object(); // mutex lock, used to synchronize threads
+    private final Object MUTEX = new Object(); // mutex lock, used to synchronize threads
 
     public MyTopic() {
         this.observers = new ArrayList<>();
@@ -30,16 +30,16 @@ public class MyTopic implements Subject{
         if (obj == null) throw new NullPointerException("Null Observer");
         // Khi một thread đang thực hiện lệnh trong khối synchronized,
         // các thread khác phải chờ đến khi thread hiện tại hoàn thành.
-        synchronized (MUTEX) {
-            if (!observers.contains(obj)) observers.add(obj);
-        }
+//        synchronized (MUTEX) {
+        if (!observers.contains(obj)) observers.add(obj);
+//        }
     }
 
     @Override
     public void unregister(Observer obj) {
-        synchronized (MUTEX) {
-            observers.remove(obj);
-        }
+//        synchronized (MUTEX) {
+        observers.remove(obj);
+//        }
     }
 
     // Notify all observers that the subject has changed
@@ -47,11 +47,11 @@ public class MyTopic implements Subject{
     public void notifyObservers() {
         List<Observer> observersLocal = null; // contains observers that will be notified
         // Synchronize to make sure any observer registered after message is received is not notified
-        synchronized (MUTEX) {
-            if (!changed) return;
-            observersLocal = new ArrayList<>(this.observers);
-            this.changed=false;
-        }
+//        synchronized (MUTEX) {
+        if (!changed) return;
+        observersLocal = new ArrayList<>(this.observers);
+        this.changed = false;
+//        }
         for (Observer obj : observersLocal) {
             obj.update();
         }
@@ -64,7 +64,7 @@ public class MyTopic implements Subject{
 
     // Post message to the topic
     public void postMessage(String msg) {
-        System.out.println("Message posted to topic: "+msg);
+        System.out.println("Message posted to topic: " + msg);
         this.message = msg;
         this.changed = true;
         notifyObservers();
