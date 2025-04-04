@@ -1,0 +1,10 @@
+services:
+    mysql: 
+        image: mysql:8.0 # chỉ định image sử dụng
+        environment:
+            MYSQL_ROOT_PASSWORD: root  # Mật khẩu cho root user
+            MYSQL_USER: user  # Tên người dùng
+            MYSQL_PASSWORD: password  # Mật khẩu cho user
+            MYSQL_DATABASE: mydb  # Tên database
+        ports:
+            - "3306:3306" # ánh xạ cổng giữa máy host và container, cấu trúc "host_port:container_port"

@@ -1,0 +1,5 @@
+services:
+    nginx: 
+        image: nginx:latest # chỉ định image sử dụng
+        ports:
+            - "8080:80" # ánh xạ cổng giữa máy host và container, cấu trúc "host_port:container_port"

@@ -1,0 +1,9 @@
+services:
+  node_app:
+    build: . # Docker sẽ xây dựng image từ thư mục hiện tại (.), Docker sẽ tìm tệp Dockerfile trong thư mục này để xây dựng image
+    container_name: node_container # Tên container sẽ được đặt là node_container
+    ports:
+      - "3000:3000"
+    volumes: # Gắn thư mục từ máy host vào container, giúp code được cập nhật tự động mà không cần rebuild container.
+      - .:/app
+    command: ["node", "index.js"]

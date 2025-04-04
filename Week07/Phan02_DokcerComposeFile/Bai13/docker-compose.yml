@@ -1,0 +1,18 @@
+services:
+  react-app:
+    build: ./react-app
+    volumes:
+      - react-build:/app/build
+    depends_on:
+      - nginx
+
+  nginx:
+    image: nginx:stable
+    ports:
+      - "80:80"
+    volumes:
+      - react-build:/usr/share/nginx/html # sử dụng volume để mount thư mục build của react vào nginx
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro # mount file cấu hình nginx vào container
+
+volumes:
+  react-build:

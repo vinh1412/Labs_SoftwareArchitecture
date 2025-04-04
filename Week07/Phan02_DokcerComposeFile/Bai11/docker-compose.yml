@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres-demo
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8083:8080"
