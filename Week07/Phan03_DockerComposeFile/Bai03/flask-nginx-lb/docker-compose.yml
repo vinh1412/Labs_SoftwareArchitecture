@@ -1,0 +1,28 @@
+networks:
+  mynetwork:
+
+services:
+  flask1:
+    build: ./app
+    container_name: flask1
+    networks:
+      - mynetwork
+
+  flask2:
+    build: ./app
+    container_name: flask2
+    networks:
+      - mynetwork
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-lb
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - flask1
+      - flask2
+    networks:
+      - mynetwork

@@ -1,0 +1,28 @@
+services: # Định nghĩa các dịch vụ (container) sẽ được khởi chạy.
+  mongo: # Dịch vụ MongoDB
+    image: mongo:latest # Dùng image chính thức của MongoDB, phiên bản mới nhất.
+    container_name: mongodb-nodejs # Đặt tên container là "mongodb-nodejs"
+    ports:
+      - "27017:27017" # Mở cổng 27017 từ container ra bên ngoài máy host.
+    volumes:
+      - mongo-data:/data/db # Mount volume tên "mongo-data" vào thư mục /data/db của MongoDB (nơi lưu trữ dữ liệu).
+    healthcheck: # Kiểm tra tình trạng "healthy" của MongoDB container.
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"] # Kiểm tra bằng lệnh ping tới MongoDB.
+      interval: 5s # Kiểm tra mỗi 5 giây.
+      timeout: 5s # Nếu sau 5 giây không có phản hồi thì coi như thất bại.
+      retries: 5 # Thử lại tối đa 5 lần trước khi coi container là "unhealthy".
+
+  nodejs: # Dịch vụ Node.js app
+    build: ./app # Build image từ Dockerfile nằm trong thư mục ./app
+    container_name: node-app # Đặt tên container là "node-app"
+    ports:
+      - "3000:3000" # Mở cổng 3000 từ container ra ngoài máy host.
+    depends_on: # Chờ MongoDB chạy xong trước khi khởi động nodejs
+      mongo:
+        condition: service_healthy # Chỉ khởi động khi MongoDB đã đạt trạng thái "healthy".
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/mydb # Biến môi trường cung cấp URI kết nối tới MongoDB (tên dịch vụ "mongo").
+    restart: on-failure # Nếu container bị lỗi thì tự động khởi động lại.
+
+volumes:
+  mongo-data: # Định nghĩa volume tên "mongo-data" dùng để lưu dữ liệu MongoDB vĩnh viễn.
