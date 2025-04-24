@@ -1,0 +1,66 @@
+services:
+  mongo-product:
+    image: mongo
+    container_name: mongo-product
+    ports:
+      - "27017:27017"
+    volumes:
+      - product-data:/data/db
+
+  mongo-order:
+    image: mongo
+    container_name: mongo-order
+    ports:
+      - "27018:27017"
+    volumes:
+      - order-data:/data/db
+
+  mongo-customer:
+    image: mongo
+    container_name: mongo-customer
+    ports:
+      - "27019:27017"
+    volumes:
+      - customer-data:/data/db
+
+  mongo-identity:
+    image: mongo
+    container_name: mongo-identity
+    ports:
+      - "27020:27017"
+    volumes:
+      - identity-data:/data/db
+
+  product-service:
+    build: ./product-service
+    ports:
+      - "8081:8080"
+    environment:
+      - MONGO_URI=mongodb://mongo-product:27017/product_service
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "8082:8080"
+    environment:
+      - MONGO_URI=mongodb://mongo-order:27017/order_service
+
+  customer-service:
+    build: ./customer-service
+    ports:
+      - "8083:8080"
+    environment:
+      - MONGO_URI=mongodb://mongo-customer:27017/customer_service
+
+  identity-service:
+    build: ./identity-service
+    ports:
+      - "8084:8080"
+    environment:
+      - MONGO_URI=mongodb://mongo-identity:27017/identity_service
+
+volumes:
+  product-data:
+  order-data:
+  customer-data:
+  identity-data:
